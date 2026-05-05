@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>UI Showcase — E-BloodBank</title>
+    <style>
+        /* --- EMBEDDED CSS FROM style.css --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #dc2626;
+            --primary-dark: #991b1b;
+            --primary-light: #fef2f2;
+            --secondary: #1e293b;
+            --accent: #f97316;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --info: #0284c7;
+            --bg: #f8fafc;
+            --bg-dark: #0f172a;
+            --surface: #ffffff;
+            --surface2: #f1f5f9;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --sidebar-w: 260px;
+            --header-h: 64px;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 4px 16px rgba(0, 0, 0, .06);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, .12);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 15px
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        img {
+            max-width: 100%;
+            display: block
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+            font-size: inherit
+        }
+
+        /* ─── LAYOUT ─── */
+        .app-layout {
+            display: flex;
+            min-height: 100vh
+        }
+
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--secondary);
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            transition: .3s
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh
+        }
+
+        .topbar {
+            height: var(--header-h);
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: var(--shadow)
+        }
+
+        .page-body {
+            padding: 28px;
+            flex: 1
+        }
+
+        /* ─── SIDEBAR ─── */
+        .sidebar-logo {
+            padding: 24px 20px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, .08)
+        }
+
+        .sidebar-logo h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff
+        }
+
+        .sidebar-logo h2 span {
+            color: var(--primary)
+        }
+
+        .sidebar-logo p {
+            font-size: 11px;
+            color: rgba(255, 255, 255, .4);
+            margin-top: 2px
+        }
+
+        .sidebar-nav {
+            padding: 12px 0
+        }
+
+        .nav-section {
+            padding: 18px 20px 4px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: rgba(255, 255, 255, .35)
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 20px;
+            color: rgba(255, 255, 255, .75);
+            transition: .2s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            font-weight: 500
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, .06);
+            color: #fff;
+            border-left-color: var(--primary)
+        }
+
+        .nav-item.active {
+            background: rgba(220, 38, 38, .15);
+            color: #fff;
+            border-left-color: var(--primary)
+        }
+
+        .nav-item .nav-icon {
+            font-size: 18px;
+            width: 22px;
+            text-align: center
+        }
+
+        /* ─── TOPBAR ─── */
+        .topbar-left h1 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text)
+        }
+
+        .topbar-left p {
+            font-size: 12px;
+            color: var(--text-muted)
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px
+        }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px
+        }
+
+        .user-info {
+            line-height: 1.3
+        }
+
+        .user-info strong {
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .user-info span {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: block
+        }
+
+        /* ─── CARDS ─── */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 20px
+        }
+
+        .card-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .card-header h3 {
+            font-size: 16px;
+            font-weight: 700
+        }
+
+        .card-body {
+            padding: 20px
+        }
+
+        .card-footer {
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            background: var(--bg)
+        }
+
+        /* ─── STAT CARDS ─── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            transition: .25s
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg)
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            opacity: .08;
+            transform: translate(20px, -20px)
+        }
+
+        .stat-card.red::before {
+            background: var(--primary)
+        }
+
+        .stat-card.green::before {
+            background: var(--success)
+        }
+
+        .stat-card.blue::before {
+            background: var(--info)
+        }
+
+        .stat-card.orange::before {
+            background: var(--accent)
+        }
+
+        .stat-icon {
+            font-size: 28px;
+            margin-bottom: 8px
+        }
+
+        .stat-value {
+            font-size: 30px;
+            font-weight: 800;
+            line-height: 1
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px
+        }
+
+        .stat-card.red .stat-value {
+            color: var(--primary)
+        }
+
+        .stat-card.green .stat-value {
+            color: var(--success)
+        }
+
+        .stat-card.blue .stat-value {
+            color: var(--info)
+        }
+
+        .stat-card.orange .stat-value {
+            color: var(--accent)
+        }
+
+        /* ─── TABLES ─── */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border)
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px
+        }
+
+        thead {
+            background: var(--surface2)
+        }
+
+        th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: var(--text-muted);
+            white-space: nowrap
+        }
+
+        td {
+            padding: 13px 16px;
+            border-top: 1px solid var(--border);
+            vertical-align: middle
+        }
+
+        tr:hover td {
+            background: var(--primary-light)
+        }
+
+        /* ─── BADGES ─── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap
+        }
+
+        .badge-success {
+            background: #dcfce7;
+            color: #16a34a
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #dc2626
+        }
+
+        .badge-warning {
+            background: #fef9c3;
+            color: #92400e
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #1d4ed8
+        }
+
+        .badge-primary {
+            background: #ede9fe;
+            color: #6d28d9
+        }
+
+        .badge-secondary {
+            background: #f1f5f9;
+            color: #475569
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: .2s;
+            white-space: nowrap
+        }
+
+        .btn:hover {
+            filter: brightness(1.05);
+            transform: translateY(-1px)
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: #fff
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: #fff
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: #fff
+        }
+
+        .btn-secondary {
+            background: var(--surface2);
+            color: var(--text);
+            border: 1px solid var(--border)
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 6px
+        }
+
+        .btn-lg {
+            padding: 14px 28px;
+            font-size: 16px;
+            border-radius: 10px
+        }
+
+        /* ─── FORMS ─── */
+        .form-group {
+            margin-bottom: 18px
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--surface);
+            transition: .2s;
+            outline: none
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, .1)
+        }
+
+        /* ─── AUTH PAGES ─── */
+        .auth-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #991b1b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px
+        }
+
+        .auth-box {
+            background: rgba(255, 255, 255, .97);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, .4)
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 28px
+        }
+
+        .auth-logo .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 12px
+        }
+
+        .auth-logo h1 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text)
+        }
+
+        .auth-logo h1 span {
+            color: var(--primary)
+        }
+
+        /* ─── BLOOD STOCK ─── */
+        .blood-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 14px
+        }
+
+        .blood-card {
+            background: var(--surface);
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            padding: 18px 14px;
+            text-align: center;
+            transition: .25s
+        }
+
+        .blood-card.safe {
+            border-color: var(--success);
+            background: #f0fdf4
+        }
+
+        .blood-card.low {
+            border-color: var(--warning);
+            background: #fffbeb
+        }
+
+        .blood-card.critical {
+            border-color: var(--danger);
+            background: #fff5f5
+        }
+
+        .blood-type-label {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1
+        }
+
+        .blood-qty {
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 8px
+        }
+
+        .blood-status {
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 6px
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 90vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #7f1d1d 100%);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .hero-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            z-index: 1
+        }
+
+        .hero-text h1 {
+            font-size: 52px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.15;
+            margin-bottom: 20px
+        }
+
+        .hero-text h1 .accent {
+            color: var(--primary)
+        }
+
+        .hero-text p {
+            font-size: 17px;
+            color: rgba(255, 255, 255, .7);
+            margin-bottom: 32px
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 14px
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .hero-stat {
+            background: rgba(255, 255, 255, .07);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 14px;
+            padding: 22px;
+            text-align: center
+        }
+
+        .hero-stat .val {
+            font-size: 32px;
+            font-weight: 800;
+            color: #fff
+        }
+
+        .hero-stat .lbl {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .6)
+        }
+
+        /* ─── CUSTOM SHOWCASE STYLES ─── */
+        .showcase-header {
+            background: #0f172a;
+            color: #fff;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .showcase-title {
+            font-weight: 800;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .showcase-badge {
+            background: var(--primary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .screen-container {
+            display: none;
+        }
+
+        .screen-container.active {
+            display: block;
+        }
+
+        .sidebar-nav .nav-item[data-screen] {
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav .nav-item[data-screen].active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--primary);
+            color: #fff;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px 20px;
+        }
+
+        .features-section {
+            padding: 80px 40px;
+            max-width: 1100px;
+            margin: 0 auto
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px
+        }
+
+        .feature-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: .25s
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg)
+        }
+
+        /* Utilities */
+        .d-flex {
+            display: flex;
+        }
+
+        .align-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .gap-2 {
+            gap: 8px;
+        }
+
+        .gap-3 {
+            gap: 12px;
+        }
+
+        .mt-4 {
+            margin-top: 16px;
+        }
+
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+
+        .text-muted {
+            color: var(--text-muted);
+        }
+
+        .btn-icon {
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Showcase Header (Fixed) -->
+    <div class="showcase-header">
+        <div class="showcase-title">
+            🩸 E-BloodBank <span class="showcase-badge">UI Preview</span>
+        </div>
+        <div style="font-size: 12px; color: rgba(255,255,255,0.6);">
+            Pilih modul di sidebar untuk melihat tampilan UI
+        </div>
+    </div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <h2>🩸 E-Blood<span>Bank</span></h2>
+                <p>Sistem Donor Darah Digital</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">Utama</div>
+                <div class="nav-item active" data-screen="home">
+                    <span class="nav-icon">🏠</span> Beranda / Landing
+                </div>
+                <div class="nav-item" data-screen="login">
+                    <span class="nav-icon">🔑</span> Login / Auth
+                </div>
+                <div class="nav-item" data-screen="register">
+                    <span class="nav-icon">📝</span> Register
+                </div>
+
+                <div class="nav-section">Dashboard Role</div>
+                <div class="nav-item" data-screen="pmi-dashboard">
+                    <span class="nav-icon">👑</span> Dashboard PMI (Admin)
+                </div>
+                <div class="nav-item" data-screen="donor-dashboard">
+                    <span class="nav-icon">👤</span> Dashboard Donor
+                </div>
+                <div class="nav-item" data-screen="rs-dashboard">
+                    <span class="nav-icon">🏥</span> Dashboard Rumah Sakit
+                </div>
+
+                <div class="nav-section">Modul Fitur</div>
+                <div class="nav-item" data-screen="blood-stock">
+                    <span class="nav-icon">🩸</span> Stok Darah Real-time
+                </div>
+                <div class="nav-item" data-screen="event-list">
+                    <span class="nav-icon">📅</span> Jadwal Event Donor
+                </div>
+                <div class="nav-item" data-screen="screening">
+                    <span class="nav-icon">🧪</span> Input Screening
+                </div>
+                <div class="nav-item" data-screen="reports">
+                    <span class="nav-icon">📊</span> Laporan & Statistik
+                </div>
+            </nav>
+
+            <div
+                style="padding: 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.05); font-size: 11px; color: rgba(255,255,255,0.4);">
+                Dibuat untuk pemaparam progres tugas besar, jadi kemungkinan masih bisa berubah ya ibu.<br>
+                © 2026 E-BloodBank Team
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+            <!-- SCREEN: HOME -->
+            <div id="screen-home" class="screen-container active">
+                <section class="hero">
+                    <div class="hero-content">
+                        <div class="hero-text">
+                            <div
+                                style="display:inline-flex;align-items:center;gap:8px;background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.3);border-radius:999px;padding:6px 16px;margin-bottom:20px;font-size:13px;color:#fca5a5;font-weight:600">
+                                🩸 Platform Donor Darah #1 Indonesia
+                            </div>
+                            <h1>Selamatkan Nyawa<br>dengan <span class="accent">Setetes Darah</span></h1>
+                            <p>E-BloodBank menghubungkan pendonor, PMI, dan rumah sakit dalam satu platform digital yang
+                                terintegrasi secara real-time.</p>
+                            <div class="hero-cta">
+                                <button class="btn btn-primary btn-lg">🩸 Daftar Donor</button>
+                                <button class="btn btn-lg"
+                                    style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2)">Masuk
+                                    Akun →</button>
+                            </div>
+                        </div>
+                        <div class="hero-stats">
+                            <div class="hero-stat">
+                                <div class="val">15K+</div>
+                                <div class="lbl">Pendonor Aktif</div>
+                            </div>
+                            <div class="hero-stat">
+                                <div class="val">200+</div>
+                                <div class="lbl">Event per Tahun</div>
+                            </div>
+                            <div class="hero-stat">
+                                <div class="val">8 Gol.</div>
+                                <div class="lbl">Darah Tersedia</div>
+                            </div>
+                            <div class="hero-stat">
+                                <div class="val">98%</div>
+                                <div class="lbl">Tingkat Kepuasan</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section style="background:#fff; padding: 40px 0;">
+                    <div class="features-section">
+                        <h2 style="text-align:center; font-size: 32px; font-weight: 800; margin-bottom: 40px;">Fitur
+                            Unggulan</h2>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div style="font-size: 40px; margin-bottom: 15px;">📅</div>
+                                <h3>Booking Event Donor</h3>
+                                <p class="text-muted">Daftar dan booking jadwal donor darah secara online dengan QR code
+                                    digital.</p>
+                            </div>
+                            <div class="feature-card">
+                                <div style="font-size: 40px; margin-bottom: 15px;">🩸</div>
+                                <h3>Monitoring Stok Real-time</h3>
+                                <p class="text-muted">Lihat ketersediaan stok darah per golongan dan komponen secara
+                                    langsung.</p>
+                            </div>
+                            <div class="feature-card">
+                                <div style="font-size: 40px; margin-bottom: 15px;">🚨</div>
+                                <h3>Request Darah Darurat</h3>
+                                <p class="text-muted">Rumah sakit dapat mengajukan permintaan darah mendesak yang
+                                    langsung diproses.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- SCREEN: LOGIN -->
+            <div id="screen-login" class="screen-container">
+                <div class="auth-page">
+                    <div class="auth-box">
+                        <div class="auth-logo">
+                            <div class="logo-icon">🩸</div>
+                            <h1>E-<span>Blood</span>Bank</h1>
+                            <p>Selamat datang kembali! Silakan login.</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" placeholder="nama@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" placeholder="••••••••">
+                        </div>
+                        <button class="btn btn-primary btn-block btn-lg">🔑 Masuk ke Akun</button>
+                        <div style="text-align:center; margin-top:20px; font-size:13px;" class="text-muted">
+                            Belum punya akun? <a href="#" style="color:var(--primary); font-weight:600;">Daftar
+                                Sekarang</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN: REGISTER -->
+            <div id="screen-register" class="screen-container">
+                <div class="auth-page">
+                    <div class="auth-box">
+                        <div class="auth-logo">
+                            <div class="logo-icon">📝</div>
+                            <h1>Daftar <span>Akun</span></h1>
+                            <p>Pilih tipe akun Anda untuk memulai.</p>
+                        </div>
+                        <div style="display:flex; gap:10px; margin-bottom:20px;">
+                            <div
+                                style="flex:1; padding:10px; border:2px solid var(--primary); border-radius:10px; text-align:center; cursor:pointer; background:var(--primary-light);">
+                                <div style="font-size:24px;">👤</div>
+                                <div style="font-size:12px; font-weight:700;">DONOR</div>
+                            </div>
+                            <div
+                                style="flex:1; padding:10px; border:1px solid var(--border); border-radius:10px; text-align:center; cursor:pointer; opacity:0.6;">
+                                <div style="font-size:24px;">🏥</div>
+                                <div style="font-size:12px; font-weight:700;">RS</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-control" placeholder="Nama lengkap Anda">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" placeholder="email@contoh.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" placeholder="Buat password">
+                        </div>
+                        <button class="btn btn-primary btn-block btn-lg">Daftar Sekarang</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN: PMI DASHBOARD -->
+            <div id="screen-pmi-dashboard" class="screen-container">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h1>Dashboard PMI</h1>
+                        <p>Selamat datang, Admin PMI Pusat</p>
+                    </div>
+                    <div class="topbar-right">
+                        <div class="topbar-user">
+                            <div class="user-avatar">A</div>
+                            <div class="user-info"><strong>Admin PMI</strong><span>Administrator</span></div>
+                        </div>
+                    </div>
+                </header>
+                <main class="page-body">
+                    <div class="stats-grid">
+                        <div class="stat-card red">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-value">1,248</div>
+                            <div class="stat-label">Total Donor Terdaftar</div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-icon">🩸</div>
+                            <div class="stat-value">542</div>
+                            <div class="stat-label">Total Kantong Darah</div>
+                        </div>
+                        <div class="stat-card orange">
+                            <div class="stat-icon">🏥</div>
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Request Menunggu</div>
+                        </div>
+                        <div class="stat-card blue">
+                            <div class="stat-icon">🧪</div>
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Perlu Screening</div>
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>🩸 Stok Darah Saat Ini</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="blood-grid">
+                                    <div class="blood-card safe">
+                                        <div class="blood-type-label">A+</div>
+                                        <div class="blood-qty">45</div>
+                                        <div class="blood-status">Aman</div>
+                                    </div>
+                                    <div class="blood-card low">
+                                        <div class="blood-type-label">B+</div>
+                                        <div class="blood-qty">12</div>
+                                        <div class="blood-status">Menipis</div>
+                                    </div>
+                                    <div class="blood-card critical">
+                                        <div class="blood-type-label">O+</div>
+                                        <div class="blood-qty">2</div>
+                                        <div class="blood-status">Kritis</div>
+                                    </div>
+                                    <div class="blood-card safe">
+                                        <div class="blood-type-label">AB+</div>
+                                        <div class="blood-qty">28</div>
+                                        <div class="blood-status">Aman</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>⚡ Aksi Cepat</h3>
+                            </div>
+                            <div class="card-body d-flex gap-2" style="flex-direction:column;">
+                                <button class="btn btn-primary btn-block">📅 Buat Event Donor</button>
+                                <button class="btn btn-info btn-block">🧪 Input Screening</button>
+                                <button class="btn btn-warning btn-block">🏥 Proses Request RS</button>
+                                <button class="btn btn-secondary btn-block">📊 Laporan</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+            <!-- SCREEN: DONOR DASHBOARD -->
+            <div id="screen-donor-dashboard" class="screen-container">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h1>Halo, Budi Santoso!</h1>
+                        <p>Semoga harimu menyenangkan.</p>
+                    </div>
+                    <div class="topbar-right">
+                        <div class="topbar-user">
+                            <div class="user-avatar" style="background:var(--success);">B</div>
+                            <div class="user-info"><strong>Budi Santoso</strong><span>Donor Tetap</span></div>
+                        </div>
+                    </div>
+                </header>
+                <main class="page-body">
+                    <div
+                        style="background: linear-gradient(135deg, #16a34a, #15803d); border-radius:14px; padding:24px; color:#fff; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between;">
+                        <div>
+                            <h2 style="font-size:24px; font-weight:800;">Anda Layak Donor! ✅</h2>
+                            <p style="opacity:0.9;">Terakhir donor: 4 bulan yang lalu. Yuk donor lagi hari ini!</p>
+                        </div>
+                        <button class="btn btn-lg" style="background:#fff; color:#16a34a;">Cari Lokasi Donor →</button>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-icon">📋</div>
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Total Donasi Saya</div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-icon">🌟</div>
+                            <div class="stat-value">120</div>
+                            <div class="stat-label">Poin Kebaikan</div>
+                        </div>
+                        <div class="stat-card red">
+                            <div class="stat-icon">❤️</div>
+                            <div class="stat-value">36</div>
+                            <div class="stat-label">Nyawa Diselamatkan</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>🎫 Booking Aktif</h3>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                style="display:flex; align-items:center; gap:20px; background:var(--surface2); padding:15px; border-radius:10px;">
+                                <div style="background:#fff; padding:10px; border-radius:8px;">
+                                    <div style="font-size:40px;">🔳</div>
+                                </div>
+                                <div style="flex:1;">
+                                    <h4 style="font-weight:700;">Event Donor PMI Jakarta Pusat</h4>
+                                    <p class="text-muted" style="font-size:12px;">📅 12 Mei 2026 | ⏰ 10:00 WIB</p>
+                                    <span class="badge badge-success">Terkonfirmasi</span>
+                                </div>
+                                <button class="btn btn-secondary btn-sm">Lihat Detail</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+            <!-- SCREEN: RS DASHBOARD -->
+            <div id="screen-rs-dashboard" class="screen-container">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h1>Dashboard Rumah Sakit</h1>
+                        <p>RS Umum Daerah Dr. Cipto</p>
+                    </div>
+                    <div class="topbar-right">
+                        <button class="btn btn-danger" style="animation: pulse-red 2s infinite;">🚨 Emergency
+                            Request</button>
+                    </div>
+                </header>
+                <main class="page-body">
+                    <div class="card" style="border-left: 5px solid var(--danger);">
+                        <div class="card-body" style="display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <h3 style="color:var(--danger);">🚨 Butuh Darah Segera?</h3>
+                                <p class="text-muted">Gunakan tombol emergency untuk permintaan yang diprioritaskan.</p>
+                            </div>
+                            <button class="btn btn-danger btn-lg">Buat Request 🩸</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📋 Riwayat Permintaan Darah</h3>
+                        </div>
+                        <div class="card-body" style="padding:0;">
+                            <div class="table-wrap" style="border:none;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID Request</th>
+                                            <th>Gol. Darah</th>
+                                            <th>Qty</th>
+                                            <th>Tanggal</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#REQ-001</td>
+                                            <td>O+ (Whole Blood)</td>
+                                            <td>10 ktg</td>
+                                            <td>04/05/2026</td>
+                                            <td><span class="badge badge-success">Selesai</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#REQ-005</td>
+                                            <td>B- (Trombosit)</td>
+                                            <td>5 ktg</td>
+                                            <td>05/05/2026</td>
+                                            <td><span class="badge badge-warning">Diproses</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#REQ-009</td>
+                                            <td>A+ (Whole Blood)</td>
+                                            <td>8 ktg</td>
+                                            <td>05/05/2026</td>
+                                            <td><span class="badge badge-info">Dikirim</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+            <!-- SCREEN: BLOOD STOCK -->
+            <div id="screen-blood-stock" class="screen-container">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h1>Stok Darah Nasional</h1>
+                        <p>Update terakhir: 5 menit yang lalu</p>
+                    </div>
+                </header>
+                <main class="page-body">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📊 Monitoring Ketersediaan Darah</h3>
+                            <div class="d-flex gap-2">
+                                <select class="form-control" style="width:150px; height:36px; padding:0 10px;">
+                                    <option>Whole Blood</option>
+                                    <option>Trombosit</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="blood-grid">
+                                <div class="blood-card safe">
+                                    <div class="blood-type-label">A+</div>
+                                    <div class="blood-qty">120</div>
+                                    <div class="blood-status">Sangat Aman</div>
+                                </div>
+                                <div class="blood-card safe">
+                                    <div class="blood-type-label">A-</div>
+                                    <div class="blood-qty">45</div>
+                                    <div class="blood-status">Aman</div>
+                                </div>
+                                <div class="blood-card low">
+                                    <div class="blood-type-label">B+</div>
+                                    <div class="blood-qty">15</div>
+                                    <div class="blood-status">Menipis</div>
+                                </div>
+                                <div class="blood-card safe">
+                                    <div class="blood-type-label">B-</div>
+                                    <div class="blood-qty">32</div>
+                                    <div class="blood-status">Aman</div>
+                                </div>
+                                <div class="blood-card critical">
+                                    <div class="blood-type-label">O+</div>
+                                    <div class="blood-qty">4</div>
+                                    <div class="blood-status">Kritis!</div>
+                                </div>
+                                <div class="blood-card safe">
+                                    <div class="blood-type-label">O-</div>
+                                    <div class="blood-qty">28</div>
+                                    <div class="blood-status">Aman</div>
+                                </div>
+                                <div class="blood-card low">
+                                    <div class="blood-type-label">AB+</div>
+                                    <div class="blood-qty">12</div>
+                                    <div class="blood-status">Menipis</div>
+                                </div>
+                                <div class="blood-card critical">
+                                    <div class="blood-type-label">AB-</div>
+                                    <div class="blood-qty">0</div>
+                                    <div class="blood-status">KOSONG</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+            <!-- SCREEN: EVENT LIST -->
+            <div id="screen-event-list" class="screen-container">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h1>Jadwal Event Donor</h1>
+                        <p>Temukan lokasi donor terdekat dari Anda</p>
+                    </div>
+                </header>
+                <main class="page-body">
+                    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:20px;">
+                        <div class="card">
+                            <div
+                                style="height:150px; background:#e2e8f0; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:40px;">
+                                🖼️</div>
+                            <div class="card-body">
+                                <h3 style="margin-bottom:10px;">Donor Darah Goes to Mall</h3>
+                                <p class="text-muted" style="font-size:13px; margin-bottom:15px;">📍 Mall Grand
+                                    Indonesia, Jakarta<br>📅 15 Mei 2026<br>⏰ 10:00 - 17:00 WIB</p>
+                                <button class="btn btn-primary btn-block">Daftar Sekarang</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div
+                                style="height:150px; background:#e2e8f0; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:40px;">
+                                🖼️</div>
+                            <div class="card-body">
+                                <h3 style="margin-bottom:10px;">Donor Darah Kampus ITERA</h3>
+                                <p class="text-muted" style="font-size:13px; margin-bottom:15px;">📍 GKU ITERA, Lampung
+                                    Selatan<br>📅 20 Mei 2026<br>⏰ 08:00 - 14:00 WIB</p>
+                                <button class="btn btn-primary btn-block">Daftar Sekarang</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div
+                                style="height:150px; background:#e2e8f0; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:40px;">
+                                🖼️</div>
+                            <div class="card-body">
+                                <h3 style="margin-bottom:10px;">Event Donor PMI Lampung</h3>
+                                <p class="text-muted" style="font-size:13px; margin-bottom:15px;">📍 Kantor PMI Lampung,
+                                    Rajabasa<br>📅 Setiap Hari Kerja<br>⏰ 08:00 - 20:00 WIB</p>
+                                <button class="btn btn-primary btn-block">Daftar Sekarang</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+            <!-- SCREEN: SCREENING -->
+            <div id="screen-screening" class="screen-container">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h1>Input Screening Kesehatan</h1>
+                        <p>Verifikasi kelayakan donor sebelum pengambilan darah</p>
+                    </div>
+                </header>
+                <main class="page-body">
+                    <div class="card" style="max-width:800px; margin: 0 auto;">
+                        <div class="card-header">
+                            <h3>📋 Form Screening (ID: #BOK-8821)</h3>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; background:var(--surface2); padding:15px; border-radius:10px;">
+                                <div><strong>Donor:</strong> Budi Santoso</div>
+                                <div><strong>Gol. Darah:</strong> O+</div>
+                            </div>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                                <div class="form-group">
+                                    <label class="form-label">Tekanan Darah (Sistolik)</label>
+                                    <input type="number" class="form-control" placeholder="120">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Tekanan Darah (Diastolik)</label>
+                                    <input type="number" class="form-control" placeholder="80">
+                                </div>
+                            </div>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                                <div class="form-group">
+                                    <label class="form-label">Kadar Hemoglobin (Hb)</label>
+                                    <input type="number" step="0.1" class="form-control" placeholder="13.5">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Berat Badan (Kg)</label>
+                                    <input type="number" class="form-control" placeholder="65">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Catatan Kesehatan</label>
+                                <textarea class="form-control" rows="3"
+                                    placeholder="Contoh: Sehat, tidak sedang mengonsumsi obat"></textarea>
+                            </div>
+                            <div
+                                style="background:var(--primary-light); padding:15px; border-radius:10px; border:1px dashed var(--primary); text-align:center; margin-bottom:20px;">
+                                <h4 style="color:var(--primary); font-weight:800;">KESIMPULAN: LAYAK DONOR ✅</h4>
+                            </div>
+                            <button class="btn btn-success btn-block btn-lg">Simpan & Lanjutkan Ambil Darah</button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+            <!-- SCREEN: REPORTS -->
+            <div id="screen-reports" class="screen-container">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h1>Laporan & Statistik</h1>
+                        <p>Analisa performa distribusi darah</p>
+                    </div>
+                </header>
+                <main class="page-body">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📅</div>
+                            <div class="stat-value">124</div>
+                            <div class="stat-label">Donasi Bulan Ini</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🏥</div>
+                            <div class="stat-value">48</div>
+                            <div class="stat-label">Permintaan Terpenuhi</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📈 Tren Pengambilan Darah (6 Bulan Terakhir)</h3>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                style="height:250px; background:var(--surface2); border-radius:10px; display:flex; align-items:flex-end; padding:20px; gap:20px; justify-content:space-around;">
+                                <div
+                                    style="width:40px; height:60%; background:var(--primary); border-radius:4px 4px 0 0; position:relative;">
+                                    <span
+                                        style="position:absolute; top:-25px; left:50%; transform:translateX(-50%); font-size:12px; font-weight:700;">Jan</span>
+                                </div>
+                                <div
+                                    style="width:40px; height:80%; background:var(--primary); border-radius:4px 4px 0 0; position:relative;">
+                                    <span
+                                        style="position:absolute; top:-25px; left:50%; transform:translateX(-50%); font-size:12px; font-weight:700;">Feb</span>
+                                </div>
+                                <div
+                                    style="width:40px; height:40%; background:var(--primary); border-radius:4px 4px 0 0; position:relative;">
+                                    <span
+                                        style="position:absolute; top:-25px; left:50%; transform:translateX(-50%); font-size:12px; font-weight:700;">Mar</span>
+                                </div>
+                                <div
+                                    style="width:40px; height:95%; background:var(--primary); border-radius:4px 4px 0 0; position:relative;">
+                                    <span
+                                        style="position:absolute; top:-25px; left:50%; transform:translateX(-50%); font-size:12px; font-weight:700;">Apr</span>
+                                </div>
+                                <div
+                                    style="width:40px; height:70%; background:var(--primary); border-radius:4px 4px 0 0; position:relative;">
+                                    <span
+                                        style="position:absolute; top:-25px; left:50%; transform:translateX(-50%); font-size:12px; font-weight:700;">Mei</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-between">
+                            <button class="btn btn-secondary btn-sm">📄 Export PDF</button>
+                            <button class="btn btn-secondary btn-sm">📊 Export CSV</button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Screen switching logic
+        document.querySelectorAll('[data-screen]').forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove active class from all nav items
+                document.querySelectorAll('[data-screen]').forEach(nav => nav.classList.remove('active'));
+                // Add active class to clicked item
+                item.classList.add('active');
+
+                // Hide all screens
+                document.querySelectorAll('.screen-container').forEach(screen => screen.classList.remove('active'));
+                // Show target screen
+                const screenId = 'screen-' + item.dataset.screen;
+                document.getElementById(screenId).classList.add('active');
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+            });
+        });
+
+        // Pulse animation logic for emergency button
+        const style = document.createElement('style');
+        style.innerHTML = `
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(220, 38, 36, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(220, 38, 36, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 38, 36, 0); }
+        }
+    `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>
